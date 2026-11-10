@@ -40,6 +40,7 @@ export default defineExperiment({
 | `substances` | `{id,label,side,targets,description}[]`? | 方程物质说明；`side` 为 `reactant` 或 `product`，`targets` 为器材 ID。 |
 | `safetyNotes` | string[]? | 安全提示。 |
 | `credit` | boolean? | 网页署名开关，默认显示。 |
+| `quality` | `'high'`\|`'standard'`? | 初始画质，默认 `'high'`（折射玻璃、柔和阴影）。帧率持续过低会自动降为标准，用户也可用右上角“画质”按钮切换；仅在明确面向低端设备时写 `'standard'`。 |
 
 ## 步骤
 
