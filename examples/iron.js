@@ -98,7 +98,7 @@ const ironExperiment = {
         tray.object.visible = false;
         ctx.addEffect('torch-flame', flame({ height: .72, width: .44, intensity: 2.1, torch: true }), torch.anchors.wick);
         ctx.addEffect('tail-lamp-flame', flame({ height: .44, width: .2 }), lamp.anchors.wick);
-        ctx.addEffect('tail-flame', flame({ height: .3, width: .18, intensity: .4 }), nozzle.anchors.tip);
+        ctx.addEffect('tail-flame', flame({ height: .3, width: .18, intensity: .4, gas: true }), nozzle.anchors.tip);
         const powder = ctx.addEffect('powder', powderBed({ length: 1.2, heatCenter: .6, startColor: 0x8b3a1f, endColor: 0x1e1e1e, reactionSpan: 1 }), tube.object);
         powder.object.rotation.z = -Math.PI / 2;
         powder.object.position.set(-.6, -.05, 0);

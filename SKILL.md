@@ -14,6 +14,7 @@ Requirements: Node ≥ 18. No npm install, no network, no browser needed. All pa
 ### 1. Pin down the experiment (ask only if truly ambiguous)
 - Subject, grade, textbook edition if given (人教版 / 北师大版 / 沪教版 …), and the exact experiment.
 - If the user names only a topic, choose the standard textbook experiment for that grade and say which one you chose.
+- Read `reference/realism.md` first: real proportions and connections, true reagent colours, phenomena in the right order. A course that is correct but looks fake fails the teacher just as much as one that looks good but is wrong.
 - Write down the **scientific content** before any code: apparatus list, procedure, expected phenomena, equations/laws, safety notes, the classic mistakes students make. Check it against your knowledge of the curriculum; when a value matters (焦距、温度、浓度、倍数), state it explicitly. Accuracy beats spectacle — a teacher will use this in class.
 
 ### 2. Design the lesson — read `reference/pedagogy.md`
@@ -42,9 +43,11 @@ Give the user the HTML file. Tell them: double-click to open; on a phone, rotate
 
 ### 6. Visual self-check — before handing over
 `node <skill>/scripts/preview-course.mjs plane-mirror.js --all --out preview.png`
-Renders, without any browser, one schematic image per step: main camera with the second-view and panel areas marked, plus top and side views. If you can view images, look at every one against `reference/visual-checklist.md` — floating parts, misaligned assemblies, things under a panel, the key phenomenon out of frame — fix and re-run. If you can open the HTML in a browser, check it there too. If you can do neither, say so and list what the teacher should glance at.
+Renders, without any browser, one schematic image per step: main camera with the second-view and panel areas marked, plus top and side views. If you can view images, look at every one against `reference/visual-checklist.md` and the list at the end of `reference/realism.md` — floating parts, misaligned assemblies, things under a panel, the key phenomenon out of frame — fix and re-run. If you can open the HTML in a browser, check it there too. If you can do neither, say so and list what the teacher should glance at.
 
 ## Hard rules (learned the hard way)
+- Make it look like the real bench: apparatus at real relative sizes, joints that actually connect, the outer flame touching what it heats, reagents in their true colours, changes that build up gradually from where the reaction happens. Use the flame that matches the fuel (`flame()` for an alcohol lamp, `flame({gas:true})` for CO / H₂ / CH₄ at a nozzle). Never tint a colourless liquid to make it "show up" — the runtime already renders liquid surfaces and volumes.
+- The page opens in high quality (refractive glass, soft shadows, flame light) and falls back by itself on slow devices; do not set `quality: 'standard'` unless the user asks for a low-end build.
 - Frame the complete visible assembly with a little breathing room; aim for 60–85% of the free area's longest dimension. Over 90% or clipping raises a warning. Use close-ups for step focus and consequences, not the default shot. Panels must never cover apparatus.
 - Consequence demos push the camera **in** to where the phenomenon happens, never out.
 - Nothing floats: tools rest on the bench or in a holder between actions; tubes actually reach into liquids; stoppers seat in mouths.
