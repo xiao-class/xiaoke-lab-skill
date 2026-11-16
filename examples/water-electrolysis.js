@@ -81,10 +81,10 @@ export default XiaokeLab.defineExperiment({
     const fire = new THREE.Mesh(new THREE.ConeGeometry(.12, .32, 16), new THREE.MeshBasicMaterial({ color: 0xffaa32 }));
     fire.position.set(-.58, 3.13, .15); oxygen.add(fire); cell.object.add(oxygen);
     // An effect updates between steps as well as during the collection tween.
-    const group = new THREE.Group(), bubbleMaterial = new THREE.MeshBasicMaterial({ color: 0xe4faff, transparent: true, opacity: .9 });
+    const group = new THREE.Group(), bubbleMaterial = XiaokeLab.build.bubbleMaterial();
     const bubbles = [];
     for (const x of [-.7, .7]) for (let i = 0; i < 5; i++) {
-      const bubble = new THREE.Mesh(new THREE.SphereGeometry(.035 + (i % 2) * .012, 10, 8), bubbleMaterial);
+      const bubble = new THREE.Mesh(new THREE.SphereGeometry(.035 + (i % 2) * .012, 16, 12), bubbleMaterial);
       group.add(bubble); bubbles.push({ bubble, x, i });
     }
     let time = 0;

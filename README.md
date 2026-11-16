@@ -4,8 +4,10 @@
 
 > “帮我做一个八年级物理『探究平面镜成像的特点』的实验课。”
 
-| 平面镜成像（物理） | 固体熔化（物理） |
+| 高锰酸钾制取氧气（化学） | 水槽特写：清水、弯月面、气泡 |
 |---|---|
+| ![制取氧气](docs/screenshots/oxygen.jpg) | ![水槽特写](docs/screenshots/water-detail.jpg) |
+| **平面镜成像（物理）** | **固体熔化（物理）** |
 | ![平面镜成像](docs/screenshots/plane-mirror.jpg) | ![固体熔化](docs/screenshots/solid-melting.jpg) |
 | **绿叶在光下制造有机物（生物）** | **电解水（化学）** |
 | ![绿叶](docs/screenshots/green-leaf.jpg) | ![电解水](docs/screenshots/water-electrolysis.jpg) |
@@ -13,11 +15,12 @@
 ## 生成的课件有什么
 
 - **写实 3D 实验台与器材**：试管、酒精灯、铁架台、烧杯、锥形瓶、光具座、显微镜、学生电源、温度计、盆栽……可按步骤操作。
+- **三档画质，默认“极致”**：真实高动态范围的摄影棚灯光，玻璃和液体会折射，器材之间有环境光遮蔽，火焰发光，背景略微虚化；设备带不动时自动降到“高”或“标准”，右上角也能手动切换。
 - **预测—观察—解释**：关键现象出现之前先让学生预测，干扰项来自真实的错误观念。
 - **“假如这样做”**：演示常见错误操作的后果（倒吸、炸裂、压碎玻片……），看完可一键倒带。
 - **看见看不见的**：化学用粒子视图（分子拆开、原子重组、原子守恒），物理用光路图或数据图，生物用显微镜视野。
 - **课堂 / 自学两种模式**、现象记录、实验小结。
-- 手机横屏、平板、电脑、教室大屏都能用，有全屏按钮；单个 HTML 文件约 2.3 MB，**不联网也能打开**。
+- 手机横屏、平板、电脑、教室大屏都能用，有全屏按钮；单个 HTML 文件约 2.5 MB，**不联网也能打开**。
 
 ## 安装
 
@@ -34,6 +37,8 @@ git clone https://github.com/xiao-class/xiaoke-lab-skill ~/.workbuddy/skills/xia
 其他支持 `SKILL.md` 的 Agent 平台同理；也可以下载 ZIP，解压后放进对应目录（或在支持上传 Skill 的平台上传 ZIP）。
 
 **运行要求**：Node.js ≥ 18。不需要 `npm install`，不需要联网，不需要浏览器。
+
+两个可选脚本需要本机装有 Chrome / Edge / Chromium 和 Node.js ≥ 22：真实渲染截图（`screenshot-course.mjs`）和导出视频（`record-course.mjs`，另需 ffmpeg）。没有它们不影响生成课件。
 
 ## 使用
 
@@ -52,7 +57,13 @@ node scripts/new-course.mjs --id plane-mirror --subject physics --title "探究�
 node scripts/validate-course.mjs plane-mirror.js          # 走完全部步骤、预测、假如与倒带，并做几何与取景检查
 node scripts/preview-course.mjs plane-mirror.js --all --out preview.png   # 无浏览器渲染每一步的示意图
 node scripts/build-course.mjs plane-mirror.js -o plane-mirror.html        # 打包成单个离线 HTML
+
+# 可选：需要本机 Chrome/Edge 与 Node ≥ 22
+node scripts/screenshot-course.mjs plane-mirror.js --all --mistakes --out shot.png   # 每一步的真实渲染截图
+node scripts/record-course.mjs plane-mirror.js --out plane-mirror.mp4                # 导出视频（另需 ffmpeg）
 ```
+
+导出视频时课件按固定时钟逐帧推进，每一帧都以“极致”画质渲染后交给 ffmpeg 编码，所以成片不受电脑快慢影响。常用参数：`--steps 3-6` 只录几步，`--size 1920x1080`，`--supersample 2` 以两倍像素渲染再缩小，`--ui` 连同右侧面板一起录（默认只录三维画面并叠加步骤字幕）。
 
 把 `examples/` 里任一范例打包，就能看到完整课件：
 
@@ -67,19 +78,20 @@ node scripts/build-course.mjs examples/water-electrolysis.js -o water-electrolys
 | `SKILL.md` | Agent 读取的主流程 |
 | `reference/` | 配置格式与 API、器材/现象/交互/视图说明、自定义器材建模、教学设计规范、视觉自查清单 |
 | `examples/` | 10 个完整课件：木炭还原氧化铜、一氧化碳还原氧化铁、高锰酸钾制氧气、二氧化碳制取与性质、电解水、凸透镜成像、平面镜成像、固体熔化、练习使用显微镜、绿叶在光下制造有机物 |
-| `scripts/` | 新建、校验、预览、打包（零依赖 Node 脚本） |
-| `runtime/` | 预构建的 3D 运行时（基于 three.js）与 CC0 材质资源 |
+| `scripts/` | 新建、校验、预览、打包（零依赖 Node 脚本）；可选的真实渲染截图与视频导出 |
+| `runtime/` | 预构建的 3D 运行时（基于 three.js r187）与 CC0 材质、HDR 环境光资源 |
 | `templates/` | 课件配置模板 |
 
 ## 说明
 
+- 画面是浏览器里的实时渲染，不是照片：液体折射、阴影和反光都是近似。它用来让学生看清操作和现象，不能代替真实实验。
 - 课件内容由 AI 生成。Skill 会要求 Agent 核对科学内容并通过校验，但**上课前请老师过一遍**，尤其是数值、方程式和安全提示。
 - 生成的课件页脚默认有一行小字“由 小课实验室 课件引擎生成”，可在课件配置里设 `credit: false` 关闭。
 - 本仓库由「小课实验室」小程序项目中的实验引擎导出。
 
 ## English
 
-**xiaoke-lab** is an agent skill that turns a request like *"make an interactive lab lesson on the electrolysis of water for grade 9"* into a single offline HTML file: a realistic 3D lab bench with step-by-step operation, predict–observe–explain cards, "what if you do it wrong" consequence demos with rewind, and a second view (particles, ray diagrams, microscope field, data plots). Content is aimed at Chinese middle-school chemistry, physics and biology curricula. Requires only Node.js ≥ 18 — no install, no network, no browser. Drop this repository into your agent's skills directory and ask for a lab lesson.
+**xiaoke-lab** is an agent skill that turns a request like *"make an interactive lab lesson on the electrolysis of water for grade 9"* into a single offline HTML file: a realistic 3D lab bench (HDR lighting, refracting glass and liquids, ambient occlusion, glowing flames) with step-by-step operation, predict–observe–explain cards, "what if you do it wrong" consequence demos with rewind, and a second view (particles, ray diagrams, microscope field, data plots). Content is aimed at Chinese middle-school chemistry, physics and biology curricula. Requires only Node.js ≥ 18 — no install, no network, no browser. Optional scripts take real-render screenshots and export an MP4 through a local Chrome/Edge (Node ≥ 22; ffmpeg for video). Drop this repository into your agent's skills directory and ask for a lab lesson.
 
 ## 许可
 

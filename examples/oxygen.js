@@ -122,7 +122,7 @@ const oxygenExperiment = {
         const stick = ctx.addApparatus(splint());
         stick.object.visible = false;
         ctx.addEffect('flame', flame(), lamp.anchors.wick);
-        const powder = ctx.addEffect('powder', powderBed({ startColor: 0x302039, endColor: 0x29231e }), tube.object);
+        const powder = ctx.addEffect('powder', powderBed({ startColor: 0x302039, endColor: 0x29231e, metallic: false }), tube.object);
         powder.object.position.y = .38;
         powder.stop();
         ctx.addEffect('heat', heatGlow(), tube.anchors.sample);
