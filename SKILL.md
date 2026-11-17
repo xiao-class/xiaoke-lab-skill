@@ -7,7 +7,7 @@ description: Generate an interactive 3D virtual lab lesson (中小学理化生�
 
 This skill turns a lab experiment request into **one self-contained HTML file** that runs offline in any modern browser (phone landscape, tablet, PC, classroom screen). You write an **experiment config** in plain JavaScript; the bundled runtime renders the 3D lab and runs the lesson.
 
-Requirements: Node ≥ 18. No npm install, no network, no browser needed. All paths below are relative to this skill's directory (`<skill>`).
+Requirements: Node ≥ 18. No npm install, no network, no browser needed. All paths below are relative to this skill's directory (`<skill>`). Two optional scripts (real-render screenshots, video export) use a locally installed Chrome/Edge and need Node ≥ 22; skip them when either is missing.
 
 ## Workflow
 
@@ -42,12 +42,21 @@ The build re-runs validation and refuses to package a failing course.
 Give the user the HTML file. Tell them: double-click to open; on a phone, rotate to landscape; use the fullscreen button for class projection.
 
 ### 6. Visual self-check — before handing over
-`node <skill>/scripts/preview-course.mjs plane-mirror.js --all --out preview.png`
-Renders, without any browser, one schematic image per step: main camera with the second-view and panel areas marked, plus top and side views. If you can view images, look at every one against `reference/visual-checklist.md` and the list at the end of `reference/realism.md` — floating parts, misaligned assemblies, things under a panel, the key phenomenon out of frame — fix and re-run. If you can open the HTML in a browser, check it there too. If you can do neither, say so and list what the teacher should glance at.
+1. `node <skill>/scripts/preview-course.mjs plane-mirror.js --all --out preview.png`
+   Renders, without any browser, one schematic image per step: main camera with the second-view and panel areas marked, plus top and side views. It shows layout, not materials.
+2. `node <skill>/scripts/screenshot-course.mjs plane-mirror.js --all --mistakes --out shot.png`
+   The real render: what the teacher will see after every step and at the end of every “假如” demo, taken from a local headless Chrome/Edge. Add `--closeup lamp.wick` (any `器材.锚点`) to push in on a flame, a liquid surface or a joint. If it reports that no browser or Node ≥ 22 is available, continue with the schematic preview only and say so.
+
+If you can view images, look at every one against `reference/visual-checklist.md` and the list at the end of `reference/realism.md` — floating parts, misaligned assemblies, things under a panel, the key phenomenon out of frame, liquids that look milky or dyed, flames that do not reach what they heat — fix and re-run. If you can do neither step, say so and list what the teacher should glance at.
+
+### 7. Video (only when the user asks for one)
+`node <skill>/scripts/record-course.mjs plane-mirror.js --out plane-mirror.mp4 [--steps 3-6] [--size 1920x1080] [--supersample 2] [--ui]`
+Plays the lesson on a fixed clock in a headless Chrome/Edge, renders every frame at the top quality tier and encodes it with ffmpeg. Without `--ui` it records the 3D bench with step captions; with `--ui` it records the whole page. Needs Chrome/Edge, Node ≥ 22 and ffmpeg — if one is missing, tell the user which, do not fake a video. The HTML lesson stays the main deliverable; a video cannot be operated.
 
 ## Hard rules (learned the hard way)
 - Make it look like the real bench: apparatus at real relative sizes, joints that actually connect, the outer flame touching what it heats, reagents in their true colours, changes that build up gradually from where the reaction happens. Use the flame that matches the fuel (`flame()` for an alcohol lamp, `flame({gas:true})` for CO / H₂ / CH₄ at a nozzle). Never tint a colourless liquid to make it "show up" — the runtime already renders liquid surfaces and volumes.
-- The page opens in high quality (refractive glass, soft shadows, flame light) and falls back by itself on slow devices; do not set `quality: 'standard'` unless the user asks for a low-end build.
+- The page opens at the top quality tier, `极致` (HDR studio lighting, refracting glass and liquids, ambient occlusion, glowing flames, soft backdrop focus) and steps down by itself to `高` and then `标准` on slow devices; do not set `quality` unless the user asks for a low-end build.
+- Liquids are liquids: use the library vessels, or `build.liquidMaterial()` (no argument = clear water, an argument = the solution's true colour) and `build.bubbleMaterial()` in custom apparatus. An opaque coloured block is not water.
 - Frame the complete visible assembly with a little breathing room; aim for 60–85% of the free area's longest dimension. Over 90% or clipping raises a warning. Use close-ups for step focus and consequences, not the default shot. Panels must never cover apparatus.
 - Consequence demos push the camera **in** to where the phenomenon happens, never out.
 - Nothing floats: tools rest on the bench or in a holder between actions; tubes actually reach into liquids; stoppers seat in mouths.
@@ -58,4 +67,4 @@ Renders, without any browser, one schematic image per step: main camera with the
 
 ## Output to the user
 - The `.html` file, plus a 3–5 line summary: experiment, steps, predictions, mistakes, anything simplified or assumed.
-- Do not claim you tested it visually unless you did.
+- Do not claim you tested it visually unless you did. Say which check you ran: schematic preview, real-render screenshots, or neither.

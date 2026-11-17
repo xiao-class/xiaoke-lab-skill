@@ -23,7 +23,7 @@ export default defineExperiment({
 | `flame({height:.385,width:.42,intensity:.75,torch:false,gas:false})` | 火焰。默认是酒精灯灯芯火焰（底部蓝、主体黄，带暖色点光）；`gas:true` 为 CO、H₂、CH₄ 在尖嘴处燃烧的淡蓝色火焰；`torch:true` 为酒精喷灯的蓝色锥形焰 | 通用接口 |
 | `combustion({height:.36,width:.18})` | 蜡烛或木条燃烧 | `setProgress` 控制熄灭 |
 | `bubbles({rise:.6,rate:6,count:24,surface?,size:1,rhythm:'continuous'})` | 水中气泡；surface 为返回液面高度的函数 | `setRate(n)`、`setRhythm('intermittent'|'continuous')` |
-| `powderBed({count:320,length:1.65,heatCenter:.65,startColor:0x1d1d1d,endColor:0xb4532a,reactionSpan:1.8})` | 固体粉末反应 | `setAttraction(p,target,up?)`、`setPour(p,mouth,pile)`，坐标为 Vector3 |
+| `powderBed({count:320,length:1.65,heatCenter:.65,startColor:0x1d1d1d,endColor:0xb4532a,reactionSpan:1.8,metallic:true})` | 固体粉末反应；产物不是金属（盐、氧化物）时传 `metallic:false`，否则粉末会越反应越有金属光泽 | `setAttraction(p,target,up?)`、`setPour(p,mouth,pile)`，坐标为 Vector3 |
 | `turbidity(liquidMesh)` | 液体浑浊，传入器材 `anchors.liquid` | `setProgress` |
 | `heatGlow()` | 受热发光 | `setProgress` |
 | `gasFlow({points,count:18,direction:1,color:0x8ed9eb})` | 沿 Vector3 数组的示意气流 | `setDirection(n)` |

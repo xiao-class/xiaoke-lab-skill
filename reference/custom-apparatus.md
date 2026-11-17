@@ -64,7 +64,7 @@ export default defineExperiment({
 
 ## 建模辅助与写实度检查
 
-`XiaokeLab.build` 提供 `tube(points, radius?, segments?)`（至少两个 `THREE.Vector3`，返回管状几何）、`roundedBox(width,height,depth,radius?)`、`lathe([[radius,y],...],segments?)`、`glassMaterial()`、`metalMaterial(color?)`、`plasticMaterial(color?)`、`liquidMaterial(color?)`、`decal(text,width?,height?)` 和 `scaleText(text,width?,height?)`（后二者返回带文字平面网格）。材质和几何每次均为新资源；应随对象一并释放。以下为 setup 中的建模片段（需自行注册器材）：
+`XiaokeLab.build` 提供 `tube(points, radius?, segments?)`（至少两个 `THREE.Vector3`，返回管状几何）、`roundedBox(width,height,depth,radius?)`、`lathe([[radius,y],...],segments?)`、`glassMaterial()`、`metalMaterial(color?)`、`plasticMaterial(color?)`、`liquidMaterial(color?)`（不传颜色是清水；传颜色表示有色溶液的真实颜色；用在封闭的液体形状上，如圆柱或旋转体，极致画质下会折射）、`bubbleMaterial()`（水中气泡）、`decal(text,width?,height?)` 和 `scaleText(text,width?,height?)`（后二者返回带文字平面网格）。材质和几何每次均为新资源；应随对象一并释放。以下为 setup 中的建模片段（需自行注册器材）：
 
 ```text
 const {THREE, build} = XiaokeLab;
